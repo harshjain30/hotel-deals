@@ -1,0 +1,4 @@
+If we are searching the input just once, the fastest way will always be a simple linear search in O(n), where n is the total number of deals in the file.
+
+Assumptions:
+1. All data in deals.csv are valid and correctly formatted
