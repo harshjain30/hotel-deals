@@ -5,13 +5,25 @@ import csv
 import sys
 import datetime
 
-def findBestDeal(f,a):
+def calcDealValue(nightly_rate, deal_value, deal_type):
+	return 0
+
+def printBestDeal(f, hotel_name, checkin_date, nights):
 	reader = csv.reader(f)
+	best_deal = [(-sys.maxsize-1, -1)]
 	for row in reader:
-	 	#do something
-			
+	 	if row[0] == hotel_name:
+	 		start_date = datetime.datetime.strptime(row[5], "%Y-%m-%d")
+	 		end_date = datetime.datetime.strptime(row[6], "%Y-%m-%d")
+	 		if checkin_date >= start_date and checkin_date <= end_date:
+	 			deal_value = calcDealValue(row[1], row[3], row[4])
+	 			if deal_value > best_deal[0][0]:
+	 				best_deal = [(deal_value, row[2])]
+	 			elif deal_value == best_deal[0][0]:
+	 				best_deal.append((deal_value, row[2]))
 
-
+	for t in best_deal:
+		print (t[1])
 
 
 if __name__ == '__main__':
@@ -27,7 +39,7 @@ if __name__ == '__main__':
 	
 	#check date is formatted
 	try:
-		booking_date = datetime.datetime.strptime(sys.argv[3], "%Y-%m-%d")
+		checkin_date = datetime.datetime.strptime(sys.argv[3], "%Y-%m-%d")
 	except ValueError:
 		print("Please enter a valid date in the format: yyyy-(m)m-(d)d")
 		exit()
@@ -36,9 +48,9 @@ if __name__ == '__main__':
 	if not sys.argv[4].isdigit() or not int(sys.argv[4]):
 		print("Please ensure that the number of nights you enter is positive and an integer")
 	
-	#check deals file is accessible and find the best deal(s)
+	#check deals file is accessible and print the best deal(s)
 	try:
 		with open(sys.argv[1]) as f:
-			findBestDeal(f, sys.argv[2], booking_date, int(sys.argv[4]))
+			printBestDeal(f, sys.argv[2], checkin_date, int(sys.argv[4]))
 	except EnvironmentError as err:
 		print("Sorry, there was an error reading the file:", err)
