@@ -1,35 +1,48 @@
-#Deal Format : Hotel Foobar,250,$50 off your stay 3 nights or more,-50,rebate_3plus,2016-03-01,2016-03-31
-#Input Format : BestHotelDeal ./deals.csv "Hotel Foobar" 2016-03-05 3
-
 import csv
 import sys
 import datetime
 
-def calcDealValue(nightly_rate, deal_value, deal_type):
+def calcDealValue(nightly_rate, deal_value, deal_type, nights, checkin_date, end_date):
+	if deal_type == "pct":
+		#calculate number of eligible nights
+		nights = min((end_date-checkin_date).days+1, nights)
+		return float(deal_value)/100*float(nightly_rate)*nights
+	if deal_type == "rebate":
+		return float(deal_value)
+	if deal_type == "rebate_3plus" and nights >= 3:
+		return float(deal_value)
 	return 0
+
 
 def printBestDeal(f, hotel_name, checkin_date, nights):
 	reader = csv.reader(f)
-	best_deal = [(-sys.maxsize-1, -1)]
+	
+	#initialize best deal
+	best_deal = (0, "")
+	
 	for row in reader:
 	 	if row[0] == hotel_name:
+	 		
 	 		start_date = datetime.datetime.strptime(row[5], "%Y-%m-%d")
 	 		end_date = datetime.datetime.strptime(row[6], "%Y-%m-%d")
+	 		
 	 		if checkin_date >= start_date and checkin_date <= end_date:
-	 			deal_value = calcDealValue(row[1], row[3], row[4])
-	 			if deal_value > best_deal[0][0]:
-	 				best_deal = [(deal_value, row[2])]
-	 			elif deal_value == best_deal[0][0]:
-	 				best_deal.append((deal_value, row[2]))
 
-	for t in best_deal:
-		print (t[1])
+	 			#calculate deal value based
+	 			deal_value = calcDealValue(row[1], row[3], row[4], nights, checkin_date, end_date)
+	 			
+	 			#update best deal if required, ignore deals with same value
+	 			if deal_value < best_deal[0]:
+	 				best_deal = (deal_value, row[2])
+
+	#print the best deal
+	print (best_deal[1]) if best_deal[1] else print("no deal available")
 
 
 if __name__ == '__main__':
 	#check all arguments are present
 	if len(sys.argv) != 5:
-		print("Please provide 4 inputs in the following order: /path/to/deals/file 'Hotel Name' date-of-booking nights")
+		print("Please provide all 4 inputs in the following order: /path/to/deals/file 'Hotel Name' date-of-booking nights")
 		exit()
 	
 	#check hotel name is provided
