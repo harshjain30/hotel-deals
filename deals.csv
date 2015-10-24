@@ -1,0 +1,10 @@
+Hotel Foobar,250,$50 off your stay 3 nights or more,-50,rebate_3plus,2016-03-01,2016-03-31
+Hotel Foobar,250,$20 off your stay,-20,rebate,2016-03-07,2016-03-15
+Hotel Foobar,250,5% off your stay,-5,pct,2016-03-01,2016-03-15
+Hotel Trip,250,$20 off your stay 3 nights or more,-20,rebate_3plus,2016-03-15,2016-03-17
+Hotel Trip,250,10% off your stay,-10,pct,2016-03-15,2016-03-17
+Hotel Advisor,100,$50 off your stay 3 nights or more,-50,rebate_3plus,2016-03-01,2016-03-10
+Hotel Advisor,200,50% off your stay,-50,pct,2016-03-25,2016-03-30
+Hotel Advisor,300,$2 off your stay,-2,rebate,2016-03-12,2016-03-15
+Hotel Vegas,83.92,$15 off your stay,-15,rebate,2016-03-28,2016-03-30
+Hotel Vegas,101.77,5% off your stay,-5,pct,2016-03-28,2016-03-30
